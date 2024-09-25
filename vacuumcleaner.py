@@ -32,12 +32,46 @@ class Environment:
 class Agent:
     def __init__(self, environment):
         self.env = environment
-        self.x = 1  # Initial position
-        self.y = 1
+        self.x = 4  # Initial position
+        self.y = 4
         self.energy = 100
 
     def perceive(self):
         return self.env.grid[self.x][self.y]['dirt'], self.env.grid[self.x][self.y]['is_wall']
+    
+    def move_towards_nearest_dirt(self):
+        """Finds the nearest dirt and moves towards it."""
+        nearest_dirt = None
+        min_distance = float('inf')
+        direction_to_move = None
+
+        # Search the entire grid for the nearest dirt
+        for i in range(self.env.size):
+            for j in range(self.env.size):
+                if not self.env.grid[i][j]['is_wall'] and self.env.grid[i][j]['dirt'] > 0:
+                    distance = abs(self.x - i) + abs(self.y - j)  # Manhattan distance
+                    if distance < min_distance:
+                        min_distance = distance
+                        nearest_dirt = (i, j)
+
+        if nearest_dirt:
+            target_x, target_y = nearest_dirt
+
+            # Move towards the nearest dirt
+            if self.x < target_x:
+                direction_to_move = "south"
+            elif self.x > target_x:
+                direction_to_move = "north"
+            elif self.y < target_y:
+                direction_to_move = "east"
+            elif self.y > target_y:
+                direction_to_move = "west"
+
+            if direction_to_move:
+                self.move(direction_to_move)
+        else:
+            self.idle()
+
 
     def move(self, direction):
         if direction == "north" and not self.env.grid[self.x - 1][self.y]['is_wall']:
