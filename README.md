@@ -35,6 +35,7 @@ At the end of the simulation, the following metrics are displayed:
    cd vacuum-cleaner-simulation
 
 2. Run the simulation:
+    ```bash
    python vacuumcleaner.py
 
 ## Requirements 
