@@ -14,7 +14,7 @@ class VacuumCleanerGUI:
         self.canvas = tk.Canvas(self.root, width=self.size * 50, height=self.size * 50)
         self.canvas.pack()
 
-        self.time_steps = 10
+        self.time_steps = 50
         self.update_interval = 500  
         self.rectangles = [[None for _ in range(self.size)] for _ in range(self.size)]
         self.evaluator = Evaluator(environment, agent)  # Initialize the Evaluator
@@ -58,7 +58,7 @@ class VacuumCleanerGUI:
             if dirt > 0:
                 self.agent.suck()
             else:
-                self.agent.move(random.choice(["north", "south", "east", "west"]))
+                self.agent.move_towards_nearest_dirt()
 
             self.env.increase_dirt()
             self.update_environment()
